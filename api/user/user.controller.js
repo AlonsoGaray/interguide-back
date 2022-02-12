@@ -1,6 +1,7 @@
 const {
   getAllUsers,
   createUser,
+  updateUser,
   getUserByEmail
 } = require('./user.service');
 
@@ -46,8 +47,26 @@ async function getUserByEmailHandler(req, res) {
   }
 }
 
+async function updateUserHandler(req, res) {
+  const { id } = req.params;
+  try {
+    const user = await updateUser(id, req.body);
+
+    if (!user) {
+      return res.status(404).json({ message: `User not found with id: ${id}` });
+    }
+    const token = signToken(user.profile);
+
+    return res.status(200).json({ token });
+  } catch (error) {
+    log.error(error);
+    return res.status(500).json({ error: error.message });
+  }
+}
+
 module.exports = {
   getAllUsersHandler,
   createUserHandler,
-  getUserByEmailHandler
+  getUserByEmailHandler,
+  updateUserHandler
 };

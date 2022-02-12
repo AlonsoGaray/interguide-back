@@ -19,12 +19,14 @@ const UserSchema = new mongoose.Schema(
     },
     firstName: {
       type: String,
-      uppercase: true,
       required: true,
     },
     lastName: {
       type: String,
-      uppercase: true,
+      required: true,
+    },
+    country: {
+      type: String,
       required: true,
     },
     photo: {
@@ -70,8 +72,8 @@ UserSchema.methods.comparePassword = async function (candidatePassword) {
 
 // Virtuals
 UserSchema.virtual('profile').get(function () {
-  const { email, firstName, lastName, photo, role} = this;
-  return { email, firstName, lastName, photo, role};
+  const { id, email, firstName, lastName, photo, country, role} = this;
+  return { id, email, firstName, lastName, photo, country, role};
 });
 
 module.exports = mongoose.model('User', UserSchema);
