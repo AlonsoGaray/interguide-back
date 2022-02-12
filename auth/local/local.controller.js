@@ -1,6 +1,5 @@
 const { getUserByEmail } = require('../../api/user/user.service');
 const { signToken } = require('../auth.service');
-const bcrypt = require('bcryptjs');
 
 async function loginUserHandler(req, res) {
   const { email, password } = req.body;
@@ -13,15 +12,9 @@ async function loginUserHandler(req, res) {
       });
     }
 
-    if (!user.isVerified) {
-      return res.status(400).json({
-        message: 'Su email no está validado, revise su bandeja de mensajes o spam',
-      });
-    }
-
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-      return res.status(400).json({
+      return res.status(402).json({
         message: 'Hubo un error, revisa si el email o la contraseña son correctos',
       });
     }
@@ -30,6 +23,7 @@ async function loginUserHandler(req, res) {
 
     res.status(200).json({ token });
   } catch (err) {
+    console.log(err)
     res.status(400).json(err);
   }
 }

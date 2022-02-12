@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 const config = require('../../config');
 
 const UserSchema = new mongoose.Schema(
@@ -10,28 +11,28 @@ const UserSchema = new mongoose.Schema(
       lowercase: true,
       unique: true,
     },
-    emailVerified: {
-      type: Boolean,
+    password: {
+      type: String,
       required: true,
       trim: true,
+      minlength: 5,
     },
-    name: {
+    firstName: {
       type: String,
       uppercase: true,
       required: true,
     },
-    nickname: {
+    lastName: {
       type: String,
+      uppercase: true,
       required: true,
     },
     photo: {
-      type: String,
-      required: true,
-    },
-    sub: {
-      type: String,
-      required: true,
-      unique: true,
+      public_id: String,
+      format: String,
+      created_at: Date,
+      url: String,
+      secure_url: String,
     },
     role: {
       type: String,
@@ -45,10 +46,32 @@ const UserSchema = new mongoose.Schema(
   },
 );
 
+UserSchema.pre('save', async function (next) {
+  const user = this;
+  try {
+    if (!user.isModified('password')) {
+      return next();
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(user.password, salt);
+
+    user.password = hash;
+  } catch (error) {
+    next(error);
+  }
+});
+
+UserSchema.methods.comparePassword = async function (candidatePassword) {
+  const user = this;
+
+  return await bcrypt.compare(candidatePassword, user.password);
+};
+
 // Virtuals
 UserSchema.virtual('profile').get(function () {
-  const { email, emailVerified, name, nickname, photo, sub, role, identificacion, telefono} = this;
-  return { email, emailVerified, name, nickname, photo, sub, role, identificacion, telefono};
+  const { email, firstName, lastName, photo, role} = this;
+  return { email, firstName, lastName, photo, role};
 });
 
 module.exports = mongoose.model('User', UserSchema);
