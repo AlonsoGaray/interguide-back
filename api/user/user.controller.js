@@ -25,7 +25,6 @@ async function createUserHandler(req, res) {
 
     return res.status(201).json(user.profile);
   } catch (error) {
-    log.error(error);
     return res.status(500).json({ error: error.keyValue });
   }
 }

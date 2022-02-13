@@ -33,7 +33,7 @@ function isAuthenticated() {
         next();
         return null;
       } else {
-        return res.status(401).end();
+        return res.status(401).json('Not Logged In').end();
       }
     } catch (error) {
       return next(error);
