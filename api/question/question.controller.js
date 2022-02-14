@@ -15,6 +15,7 @@ async function getAllQuestionsHandler(req, res) {
 async function createQuestionHandler(req, res) {
   try {
     const question = await createQuestion(req.body);
+    console.log("🚀 ~ file: question.controller.js ~ line 18 ~ createQuestionHandler ~ question", question)
     return res.status(201).json(question);
   } catch (error) {
     return res.status(500).json({ error: error.message });
