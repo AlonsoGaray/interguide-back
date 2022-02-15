@@ -22,6 +22,10 @@ const QuestionSchemaa = new mongoose.Schema(
       unique: true,
       required: true,
     },
+    company: {
+      type: String,
+      required: true,
+    },
     tag: [
       {
         _id: mongoose.Schema.Types.ObjectId,
