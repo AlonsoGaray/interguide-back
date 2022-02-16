@@ -36,10 +36,25 @@ const QuestionSchemaa = new mongoose.Schema(
       type: Number,
       default: '0',
     },
-    answer: {
-      type: Number,
-      default: '0',
-    },
+    answers: [
+      {
+        type: new mongoose.Schema(
+          {
+            userId: {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: 'User',
+              required: true,
+            },
+            description: {
+              type: String,
+            },
+          },
+          {
+            timestamps: true,
+          },
+        )
+      }
+    ]
   },
   {
     timestamps: true,
