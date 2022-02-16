@@ -11,8 +11,13 @@ async function createQuestion(question) {
   return savedQuestion;
 }
 
+async function getQuestionById(id) {
+  const question = await Question.findById(id);
+  return question;
+}
 
 module.exports = {
   getAllQuestions,
   createQuestion,
+  getQuestionById
 };
