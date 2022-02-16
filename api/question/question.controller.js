@@ -1,6 +1,7 @@
 const {
   getAllQuestions,
   createQuestion,
+  getQuestionById
 } = require('./question.service');
 const { emitQuestion } = require('./question.event');
 
@@ -8,6 +9,21 @@ async function getAllQuestionsHandler(req, res) {
   try {
     const questions = await getAllQuestions();
     return res.status(200).json(questions);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
+
+async function getQuestionByIdHandler(req, res) {
+  const { id } = req.params;
+  try {
+    const question = await getQuestionById(id);
+
+    if (!question) {
+      return res.status(404).json({ message: `Question not found with id: ${id}` });
+    }
+
+    return res.status(200).json(question);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -28,4 +44,5 @@ async function createQuestionHandler(req, res) {
 module.exports = {
   getAllQuestionsHandler,
   createQuestionHandler,
+  getQuestionByIdHandler
 };
