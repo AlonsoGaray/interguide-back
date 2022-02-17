@@ -16,8 +16,19 @@ async function getQuestionById(id) {
   return question;
 }
 
+async function updateQuestion(id, question) {
+  const updatedQuestion = await Question.findByIdAndUpdate({"_id": id}, {
+    $push : {
+      "answers": {userId: question.userId, description: question.description}
+    }},
+    {safe: true, upsert: true, new : true},)
+
+  return updatedQuestion;
+}
+
 module.exports = {
   getAllQuestions,
   createQuestion,
-  getQuestionById
+  getQuestionById,
+  updateQuestion
 };
