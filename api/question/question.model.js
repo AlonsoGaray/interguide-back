@@ -47,6 +47,7 @@ const QuestionSchemaa = new mongoose.Schema(
             },
             description: {
               type: String,
+              required: true,
             },
           },
           {
