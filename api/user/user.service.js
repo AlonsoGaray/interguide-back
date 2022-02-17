@@ -10,6 +10,11 @@ async function getUserByEmail(email) {
   return user;
 }
 
+async function getUserById(id) {
+  const user = await User.findById(id);
+  return user;
+}
+
 async function updateUser(id, user) {
   const updatedUser = await User.findByIdAndUpdate(id, user, { new: true });
   return updatedUser;
@@ -25,5 +30,6 @@ module.exports = {
   getAllUsers,
   createUser,
   getUserByEmail,
-  updateUser
+  updateUser,
+  getUserById
 };
