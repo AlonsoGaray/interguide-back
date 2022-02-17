@@ -4,6 +4,11 @@ function emitQuestion(question) {
   socket.io.emit('question:create', question);
 }
 
+function emitUpdateQuestion(question) {
+  socket.io.emit('question:update', question);
+}
+
 module.exports = {
-  emitQuestion
+  emitQuestion,
+  emitUpdateQuestion
 }
