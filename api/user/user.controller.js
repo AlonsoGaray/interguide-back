@@ -2,7 +2,8 @@ const {
   getAllUsers,
   createUser,
   updateUser,
-  getUserByEmail
+  getUserByEmail,
+  getUserById
 } = require('./user.service');
 
 const { signToken } = require('../../auth/auth.service');
@@ -46,6 +47,20 @@ async function getUserByEmailHandler(req, res) {
   }
 }
 
+async function getUserByIdHandler(req, res) {
+  const { id } = req.params;
+  try {
+    const user = await getUserById(id);
+    if (!user) {
+      return res.status(404).json({ message: `Users not found with id: ${id}` });
+    }
+    return res.status(200).json(user.profile);
+  } catch (error) {
+    log.error(error);
+    return res.status(400).json({ error: error.message });
+  }
+}
+
 async function updateUserHandler(req, res) {
   const { id } = req.params;
   try {
@@ -67,5 +82,6 @@ module.exports = {
   getAllUsersHandler,
   createUserHandler,
   getUserByEmailHandler,
-  updateUserHandler
+  updateUserHandler,
+  getUserByIdHandler
 };
