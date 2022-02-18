@@ -7,16 +7,6 @@ const QuestionSchemaa = new mongoose.Schema(
       ref: 'User',
       required: true,
     },
-    firstName: {
-      type: String,
-      ref: 'User',
-      required: true,
-    },
-    lastName: {
-      type: String,
-      ref: 'User',
-      required: true,
-    },
     question: {
       type: String,
       unique: true,
