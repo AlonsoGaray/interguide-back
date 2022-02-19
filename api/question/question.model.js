@@ -22,10 +22,19 @@ const QuestionSchemaa = new mongoose.Schema(
         name: String,
       },
     ],
-    vote: {
+    voteCount: {
       type: Number,
       default: '0',
     },
+    votes: [
+      {
+        userId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',
+          required: true,
+        },
+      },
+    ],
     answers: [
       {
         type: new mongoose.Schema(

@@ -2,7 +2,9 @@ const {
   getAllQuestions,
   createQuestion,
   getQuestionById,
-  updateQuestion
+  updateQuestion,
+  updateUpVote,
+  updateDownVote
 } = require('./question.service');
 const { emitQuestion, emitUpdateQuestion } = require('./question.event');
 
@@ -59,9 +61,41 @@ async function updateQuestionHandler(req, res) {
   }
 }
 
+async function updateUpVoteHandler(req, res) {
+  try {
+    const question = await updateUpVote(req.body);
+
+    emitUpdateQuestion(question);
+    if (!question) {
+      return res.status(404).json({ message: 'Error' });
+    }
+
+    return res.status(200).json(question);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
+
+async function updateDownVoteHandler(req, res) {
+  try {
+    const question = await updateDownVote(req.body);
+    emitUpdateQuestion(question);
+
+    if (!question) {
+      return res.status(404).json({ message: 'Error' });
+    }
+
+    return res.status(200).json(question);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
+
 module.exports = {
   getAllQuestionsHandler,
   createQuestionHandler,
   getQuestionByIdHandler,
-  updateQuestionHandler
+  updateQuestionHandler,
+  updateUpVoteHandler,
+  updateDownVoteHandler
 };

@@ -31,9 +31,41 @@ async function updateQuestion(id, question) {
   return updatedQuestion;
 }
 
+async function updateUpVote(data) {
+  const updatedUpVote = await Question.findByIdAndUpdate(
+    {
+      "_id": data.questionID,
+    },
+    {
+      $inc: { "voteCount": 1 },
+      $push: { "votes": {"userId": data.userId} }
+    },
+    {safe: true, new : true, multi: true },
+  )
+
+  return updatedUpVote;
+}
+
+async function updateDownVote(data) {
+  const updatedUpVote = await Question.findByIdAndUpdate(
+    {
+      "_id": data.questionID,
+    },
+    {
+      $inc: { "voteCount": -1 },
+      $pull: { "votes": {"userId": data.userId} },
+    },
+    {safe: true, new : true, multi: true },
+  )
+
+  return updatedUpVote;
+}
+
 module.exports = {
   getAllQuestions,
   createQuestion,
   getQuestionById,
-  updateQuestion
+  updateQuestion,
+  updateUpVote,
+  updateDownVote
 };
