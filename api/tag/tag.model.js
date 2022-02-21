@@ -6,7 +6,7 @@ const TagSchemaa = new mongoose.Schema(
       type: String,
       unique: true,
       required: true,
-      minLength: 2
+      minLength: 1
     },
   },
   {
