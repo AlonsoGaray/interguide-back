@@ -25,11 +25,41 @@ async function getAllUsers() {
   return users;
 }
 
+async function updatePlusPoints(userId) {
+  const updatedUpVote = await User.findByIdAndUpdate(
+    {
+      "_id": userId,
+    },
+    {
+      $inc: { "points": 5 },
+    },
+    {safe: true, upsert: true, new : true},
+  )
+
+  return updatedUpVote;
+}
+
+async function updateLessPoints(userId) {
+  const updatedUpVote = await User.findByIdAndUpdate(
+    {
+      "_id": userId,
+    },
+    {
+      $inc: { "points": -5 },
+    },
+    {safe: true, upsert: true, new : true},
+  )
+
+  return updatedUpVote;
+}
+
 
 module.exports = {
   getAllUsers,
   createUser,
   getUserByEmail,
   updateUser,
-  getUserById
+  getUserById,
+  updatePlusPoints,
+  updateLessPoints
 };
