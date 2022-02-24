@@ -5,7 +5,9 @@ const {
   createUserHandler,
   getUserByEmailHandler,
   updateUserHandler,
-  getUserByIdHandler
+  getUserByIdHandler,
+  updatePlusPointsHandler,
+  updateLessPointsHandler
 } = require('./user.controller');
 
 const { isAuthenticated } = require('../../auth/auth.service');
@@ -15,6 +17,8 @@ router.get('/', getAllUsersHandler);
 router.post('/', createUserHandler);
 router.get('/:id', isAuthenticated(), getUserByIdHandler);
 router.get('/email/:email', isAuthenticated(), getUserByEmailHandler);
-router.patch('/:id', updateUserHandler);
+router.patch('/:id', isAuthenticated(), updateUserHandler);
+router.patch('/like/plus', isAuthenticated(), updatePlusPointsHandler);
+router.patch('/like/less', isAuthenticated(), updateLessPointsHandler);
 
 module.exports = router;

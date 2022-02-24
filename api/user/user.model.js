@@ -36,6 +36,10 @@ const UserSchema = new mongoose.Schema(
       url: String,
       secure_url: String,
     },
+    points: {
+      type: Number,
+      default: '0',
+    },
     role: {
       type: String,
       default: 'usuario',
@@ -72,8 +76,8 @@ UserSchema.methods.comparePassword = async function (candidatePassword) {
 
 // Virtuals
 UserSchema.virtual('profile').get(function () {
-  const { id, email, firstName, lastName, photo, country, role} = this;
-  return { id, email, firstName, lastName, photo, country, role};
+  const { id, email, firstName, lastName, photo, country, points, role} = this;
+  return { id, email, firstName, lastName, photo, country, points, role};
 });
 
 module.exports = mongoose.model('User', UserSchema);

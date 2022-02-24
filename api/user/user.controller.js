@@ -3,9 +3,12 @@ const {
   createUser,
   updateUser,
   getUserByEmail,
-  getUserById
+  getUserById,
+  updatePlusPoints,
+  updateLessPoints
 } = require('./user.service');
 
+const { emitUpdateUser } = require('./user.event');
 const { signToken } = require('../../auth/auth.service');
 const { log } = require('../../utils/logger');
 
@@ -78,10 +81,49 @@ async function updateUserHandler(req, res) {
   }
 }
 
+async function updatePlusPointsHandler(req, res) {
+  const {userID} =  req.body;
+
+  try {
+    const user = await updatePlusPoints(userID);
+    console.log("🚀 ~ file: user.controller.js ~ line 89 ~ updatePlusPointsHandler ~ user", user)
+
+    emitUpdateUser(user);
+
+    if (!user) {
+      return res.status(404).json({ message: 'Error' });
+    }
+
+    return res.status(200).json(user);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
+
+async function updateLessPointsHandler(req, res) {
+  const {userID} =  req.body;
+  try {
+    const user = await updateLessPoints(userID);
+
+    emitUpdateUser(user);
+
+    if (!user) {
+      return res.status(404).json({ message: 'Error' });
+    }
+
+    return res.status(200).json(user);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
+
+
 module.exports = {
   getAllUsersHandler,
   createUserHandler,
   getUserByEmailHandler,
   updateUserHandler,
-  getUserByIdHandler
+  getUserByIdHandler,
+  updatePlusPointsHandler,
+  updateLessPointsHandler
 };
